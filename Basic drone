@@ -1,0 +1,59 @@
+# Welcome to Sonic Pi v2.11.1
+
+use_debug false
+use_bpm 130
+
+# Our mixer!
+master = (ramp *range(0, 1, 0.01))
+kick_volume = 1
+bass_volume = 1
+revbass_volume = 1
+snare_volume = 0.5
+hats_volume = 0.5
+open_hats_volume = 1
+synth_volume = 1
+pad_volume = 1
+beep_volume = 1
+
+
+live_loop :noteLoop do
+  
+  use_synth :tech_saws
+  play chord(:C3, :diminished).choose, attack: 2, sustain: 10, release: 4
+  
+  sleep 10
+end
+
+
+live_loop :noteLoop2 do
+  use_synth :mod_tri
+  play rrand(30, 50), attack: choose([2, 4, 6]), sustain: choose([4,6,10]), release: choose([4,6,8])
+  sleep 10
+  
+end
+
+
+kick_cutoffs = range(50, 80, 0.5).mirror # A LFO for the poor
+live_loop :kick do
+  
+  if (spread 1, 4).tick then # 4-on-the-floor
+    sample :bd_tek, amp: master.look * kick_volume,
+      cutoff: kick_cutoffs.look
+  end
+  sleep 0.25 # 16th note heartbeat
+end
+
+
+beep_notes = (ring :d5, :d5, :f5, :e5, :d6, :g5)
+live_loop :beeps do
+  
+  sync :kick
+  sleep 0.5
+  with_fx :distortion do
+    with_synth :beep do
+      play beep_notes.choose, amp: beep_volume * master.look,
+        attack: rrand(0.2, 0.4), decay: rrand(0.2, 0.4), release: 0.1
+    end
+  end
+  sleep 0.5
+end
