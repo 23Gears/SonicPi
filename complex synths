@@ -1,5 +1,4 @@
-# Using https://www.youtube.com/watch?v=GTsGY2MtIMU&t=1s
-# From Davids Fiddle
+
 
 att = 0
 sus = 0.1
@@ -9,16 +8,19 @@ amp = 1
 use_bpm 90
 
 define :syn do |note|
-  use_synth_defaults attack: att, sustain: sus, release: rel, apmlitude: amp
-  synth :saw, note: note
+  use_synth_defaults attack: att, sustain: sus, release: rel, amplitude: amp
+  synth :prophet, note: note
+end
+define :syn2 do |note|
+  use_synth_defaults attack: att, sustain: sus, release: rel, amplitude: amp
   synth :saw, note: note + 0.2
 end
 
 with_fx :compressor do
   live_loop :tarkus do
     syn (ring :f3,:bb3,:eb4,:bb3,:gs4,:bb3,:e4,:bb3,:es4).tick
+    syn2 (ring :e3,:bb2,:ab3,:bb4,:gs3,:cb3,:b4,:bb2,:as4).tick
     sleep 0.25
   end
 end
-
 
