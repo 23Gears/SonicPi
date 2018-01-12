@@ -10,16 +10,16 @@ use_bpm 90
 define :syn do |note|
   use_synth_defaults attack: att, sustain: sus, release: rel, amplitude: amp
   synth :prophet, note: note
+  synth :saw, note: note + 0.2
 end
 define :syn2 do |note|
   use_synth_defaults attack: att, sustain: sus, release: rel, amplitude: amp
-  synth :saw, note: note + 0.2
 end
 
 with_fx :compressor do
   live_loop :tarkus do
     syn (ring :f3,:bb3,:eb4,:bb3,:gs4,:bb3,:e4,:bb3,:es4).tick
-    syn2 (ring :e3,:bb2,:ab3,:bb4,:gs3,:cb3,:b4,:bb2,:as4).tick
+    syn (ring :b2,:bb3,:ab2,:bb3,:gs2,:bb3,:b3,:bb3,:as3).look
     sleep 0.25
   end
 end
